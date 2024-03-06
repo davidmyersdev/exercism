@@ -1,35 +1,34 @@
+export class BufferEmptyError extends Error {}
+export class BufferFullError extends Error {}
+
 export default class CircularBuffer<T> {
-  constructor(initial: unknown) {
-    throw new Error('Remove this statement and implement this function')
+  private buffer: T[]
+  private bufferSize: number
+
+  constructor(bufferSize: number) {
+    this.buffer = []
+    this.bufferSize = bufferSize
   }
 
-  write(value: unknown): unknown {
-    throw new Error('Remove this statement and implement this function')
+  write(value: T): void {
+    if (this.buffer.length === this.bufferSize) throw new BufferFullError()
+
+    this.buffer.unshift(value)
   }
 
-  read(): unknown {
-    throw new Error('Remove this statement and implement this function')
+  read(): T {
+    if (this.buffer.length === 0) throw new BufferEmptyError()
+
+    return this.buffer.pop()!
   }
 
-  forceWrite(value: unknown): unknown {
-    throw new Error('Remove this statement and implement this function')
+  forceWrite(value: T): void {
+    if (this.buffer.length === this.bufferSize) this.buffer.pop()
+
+    this.buffer.unshift(value)
   }
 
-  clear(): unknown {
-    throw new Error('Remove this statement and implement this function')
-  }
-}
-
-export class BufferFullError extends Error {
-  constructor() {
-    super()
-    throw new Error('Remove this statement and implement this function')
-  }
-}
-
-export class BufferEmptyError extends Error {
-  constructor() {
-    super()
-    throw new Error('Remove this statement and implement this function')
+  clear(): void {
+    this.buffer.splice(0)
   }
 }
